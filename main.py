@@ -46,12 +46,6 @@ def core_to_letter(core):
     return number_as_letter(min(filtered_cores)) if len(filtered_cores) > 0 else 'N/A'
 
 
-def pretty_print(cores):
-    for core in cores:
-        letter = core_to_letter(core)
-        print(core[0], letter)
-
-
 def tabulate(cores, cols=5):
     rows = batched(cores, cols)
 
@@ -68,18 +62,14 @@ def tabulate(cores, cols=5):
 @click.option("--words", "-w", multiple=True, default=[], help="Calculate the numeric core of a list of words")
 @click.option("--table", default=False, flag_value="table", help="Display words cores as table")
 def main(numbers, words, table):
-    cores = []
     if all(numbers):
-        cores = numbers, numeric_core(numbers)
+        cores = numbers, list(numeric_core(numbers))
+        print(cores)
     if len(words) > 1:
         cores = list(map(word_core, words))
-
-    if table:
-        tabulate(cores)
-        return
-
-    for core in cores:
-        print(core)
+        if table:
+            tabulate(cores)
+            return
 
 
 if __name__ == '__main__':
